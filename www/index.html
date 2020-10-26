@@ -153,7 +153,11 @@
     var active = false;
     var startTime = 0;
     var period = 0;
-
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var today = year + "年" + month + "月" + day + "日";
 
     
     // ボタンの初期設定
@@ -161,7 +165,10 @@
         $('#btnA').prop('disabled', false);
         $('#btnB').prop('disabled', false);
         $('#btnC').prop('disabled', false);
-        
+
+        $("#day").html(today);
+        btnCClick(null);
+
     }
 
     // Alarmの処理
@@ -173,16 +180,15 @@
       img.onload = function() {
       ctx.drawImage(img, 0, 0, 300, 300);
       };
-    }
     var audio = new Audio();
     audio.src = "pin.wav";
     audio.play();
-
+}
     // ButtonAがクリックされた時の処理
     function btnAClick(e){
       active = true;
       startTime = new Date(); 
-        
+
     }
 
     // ButtonBがクリックされた時の処理
@@ -197,8 +203,10 @@
         alarm();
         active = false;
         period = 60* parseInt( $("#minute").val() ) + parseInt( $("#second").val() );
+       var j = parseInt( $("#minute").val() );
+       var k = parseInt( $("#second").val() );
         $("#time").html("経過時間： 0");
-        $("#remain").html("残り時間： " + period);
+        $("#remain").html("残り時間： " + j + ":" +k );
         
     }
 
@@ -207,8 +215,14 @@
        if (active) {
        var time = parseInt( (new Date() - startTime)/1000 );
        var rest = period - time;
-       $("#time").html("経過時間： " + time);
-       $("#remain").html("残り時間： " + rest);
+       var m = parseInt(rest/60);      
+       var s = parseInt(rest-m*60);
+
+       var tm = parseInt(time/60);      
+       var ts = parseInt(time-tm*60);
+
+       $("#time").html("経過時間： " + tm + ":"+ ts);
+       $("#remain").html("残り時間： " + m + ":"+s);
        analog(rest);
         }
         if(rest <= 0){
@@ -225,6 +239,7 @@
 
 	<div id="minuteStr">〇</div>
 	<div id="secondStr">〇</div>
+  <div id="day"></div>
 
 	<div id="remain">Remaining time</div>
 	<div id="time">Time</div>
